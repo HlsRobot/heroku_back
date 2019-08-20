@@ -1,0 +1,25 @@
+twilio:
+  account_sid: ACb971564f05352edc89d4b8d5fea774fe
+  auth_token: 1580f6fd9ad27d170fe53be78f1aa104
+  trial_number: +1(818) 650-3608
+  url: https://8cf20aa9.ngrok.io/api/
+env_variables:
+  BUCKET_NAME: twilio-app
+app:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/twilio?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
+    username: root
+    password: Ioan2205
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+
+
+
