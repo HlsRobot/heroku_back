@@ -2,6 +2,7 @@ package com.twilio.paymentCenter.jlpsolution;
 
 import com.twilio.twiml.VoiceResponse;
 import com.twilio.twiml.voice.Say;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -108,11 +110,13 @@ public class JLPSolutionController {
 
         final Map<String, String[]> parameters = request.getParameterMap();
         LOGGER.info(Arrays.toString(parameters.get("Memory")));
+        final HashMap<String, String> jsonResponse = new HashMap<>();
+        jsonResponse.put("say", "Thank you for providing the information. An agent will contact you shortly!");
 
         final Say say = new Say.Builder("Thank you for providing the information. An agent will contact you shortly!").build();
         final VoiceResponse voiceResponse = new VoiceResponse.Builder().say(say).build();
-        response.setContentType("application/xml");
-        response.getWriter().print(voiceResponse.toXml());
+        response.setContentType("application/json");
+        response.getWriter().print(new JSONObject(jsonResponse));
     }
 
 }
