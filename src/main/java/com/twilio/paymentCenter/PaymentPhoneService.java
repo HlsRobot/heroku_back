@@ -73,8 +73,8 @@ public class PaymentPhoneService {
 
     private VoiceResponse sendInitialMessage(final Payment payment) {
         final Say say  = new Say.Builder(
-                String.format("Thanks for calling the automated payment system. " +
-                        "There is a payment request associated to your phone number for the amount of %s euros. " +
+                String.format("This is the automated payment system of " + this.twilioConfiguration.getCompanyName() +
+                        "There is a payment request associated to your account for the amount of %s euros. " +
                         "Your selected method is %s. " +
                         "Please type in the 16 Digits of your credit card.", payment.getAmount(), payment.getMethod()))
                 .build();
@@ -88,13 +88,15 @@ public class PaymentPhoneService {
 
         if (creditCard != null) {
             final Payment payment = this.paymentRepository.findByCallSid(callSid).orElse(new Payment());
-            payment.setCreditCardNumber(creditCard);
+            final String sanitizedCreditCard = "XXXX-XXXX-XXXX-" + creditCard.substring(12);
+            payment.setCreditCardNumber(sanitizedCreditCard);
             this.paymentRepository.save(payment);
         }
 
         final Say say = new Say.Builder("Thank you for providing your credit card number. " +
                 "Please tell us the name of the credit card owner as written on the card.").build();
-        final Gather gather = new Gather.Builder().inputs(Gather.Input.SPEECH).speechTimeout("3").say(say).action("/api/owner").build();
+        final Gather gather = new Gather.Builder().inputs(Gather.Input.SPEECH).language(Gather.Language.EN_US)
+                .actionOnEmptyResult(true).speechTimeout("3").say(say).action("/api/owner").build();
         return new VoiceResponse.Builder().gather(gather).build();
     }
 
@@ -106,7 +108,8 @@ public class PaymentPhoneService {
             this.paymentRepository.save(payment);
         } else {
             final Say say = new Say.Builder("Sorry I did not get that. Please repeat the name of the credit card owner as written on the card.").build();
-            final Gather gather = new Gather.Builder().inputs(Gather.Input.SPEECH).speechTimeout("3").say(say).action("/api/owner").build();
+            final Gather gather = new Gather.Builder().inputs(Gather.Input.SPEECH).language(Gather.Language.EN_GB)
+                    .actionOnEmptyResult(true).speechTimeout("3").say(say).action("/api/owner").build();
             return new VoiceResponse.Builder().gather(gather).build();
         }
 
@@ -121,8 +124,9 @@ public class PaymentPhoneService {
         //TODO validate date
 
         if (date != null) {
+            final String sanitizeDate = date.substring(0,2) + "/" + date.substring(2);
             final Payment payment = this.paymentRepository.findByCallSid(callSid).orElse(new Payment());
-            payment.setExpirationDate(date);
+            payment.setExpirationDate(sanitizeDate);
             this.paymentRepository.save(payment);
         }
 
@@ -138,7 +142,7 @@ public class PaymentPhoneService {
 
         final Payment payment = this.paymentRepository.findByCallSid(callSid).orElse(new Payment());
         if (securityNumber != null) {
-            payment.setSecurityNumber(securityNumber);
+            payment.setSecurityNumber("XXX");
             payment.setSuccess(true);
             this.paymentRepository.save(payment);
         }

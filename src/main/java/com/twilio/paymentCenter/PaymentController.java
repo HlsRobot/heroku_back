@@ -64,7 +64,8 @@ public class PaymentController {
                                     final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 
         System.out.println(owner);
-        final VoiceResponse voiceResponse = this.paymentPhoneService.handleOwner(owner.toUpperCase(), request.getParameter("CallSid"));
+        final String sanitizedOwner = owner != null ? owner.toUpperCase() : null;
+        final VoiceResponse voiceResponse = this.paymentPhoneService.handleOwner(sanitizedOwner, request.getParameter("CallSid"));
         response.setContentType("application/xml");
         response.getWriter().print(voiceResponse.toXml());
     }

@@ -39,7 +39,7 @@ public class TwilioSmsSender implements SmsSender {
     @Override
     public void sendReceipt(final Payment payment) {
         final PhoneNumber to = new PhoneNumber(payment.getCalledNumber());
-        final PhoneNumber from = new PhoneNumber(this.twilioConfiguration.getTrialNumber());
+        final PhoneNumber from = new PhoneNumber(this.twilioConfiguration.getAlpha());
 
         final String message = String.format("Your personal receipt: OrderId: %d,  Amount: %s€,  Method: %s,  Card Number: %s,  Card Owner: %s",
                 payment.getId(), payment.getAmount(), payment.getMethod(), payment.getCreditCardNumber(), payment.getOwner());

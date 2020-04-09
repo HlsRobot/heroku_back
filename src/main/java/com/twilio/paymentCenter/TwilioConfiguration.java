@@ -11,6 +11,8 @@ public class TwilioConfiguration {
     private String authToken;
     private String trialNumber;
     private String url;
+    private String companyName;
+    private String alpha;
 
     public TwilioConfiguration() {
 
@@ -46,5 +48,21 @@ public class TwilioConfiguration {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(String alpha) {
+        this.alpha = alpha;
     }
 }
